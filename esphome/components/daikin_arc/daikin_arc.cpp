@@ -261,7 +261,7 @@ bool DaikinArcClimate::parse_state_frame_(const uint8_t frame[]) {
 
   char buf[DAIKIN_STATE_FRAME_SIZE * 3 + 1] = {0};
   for (size_t i = 0; i < DAIKIN_STATE_FRAME_SIZE; i++) {
-    sprintf(buf, "%s%02x ", buf, frame[i]);
+    sprintf(buf+3*i, "%02x ", frame[i]);
   }
   ESP_LOGD(TAG, "FRAME %s", buf);
 
@@ -363,7 +363,7 @@ bool DaikinArcClimate::on_receive(remote_base::RemoteReceiveData data) {
           break;
         }
       }
-      sprintf(buf.get(), "%s%02x ", buf.get(), byte);
+      sprintf(buf.get()+3*i, "%02x ", byte);
     }
     ESP_LOGD(TAG, "WHOLE FRAME %s  size: %d", buf.get(), data.size());
   }
@@ -396,9 +396,9 @@ bool DaikinArcClimate::on_receive(remote_base::RemoteReceiveData data) {
         type_ch = '0';
 
       if (abs(data[j]) > 100000) {
-        sprintf(sbuf, "%s%-5d[%c] ", sbuf, data[j] > 0 ? 99999 : -99999, type_ch);
+        sprintf(sbuf+j*10, "%-5d[%c] ", data[j] > 0 ? 99999 : -99999, type_ch);
       } else {
-        sprintf(sbuf, "%s%-5d[%c] ", sbuf, (int) (round(data[j] / 10.) * 10), type_ch);
+        sprintf(sbuf+j*10, "%-5d[%c] ", (int) (round(data[j] / 10.) * 10), type_ch);
       }
       if (j == data.size() - 1) {
         ESP_LOGD(TAG, "DATA %04x: %s", (j - 8 > 0xffff ? 0 : j - 8), sbuf);
