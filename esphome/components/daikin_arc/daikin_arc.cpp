@@ -249,8 +249,22 @@ climate::ClimateTraits DaikinArcClimate::traits() {
   return traits;
 }
 
+bool DaikinArcClimate::is_daikin_frame_(const uint8_t frame[]) {
+  uint8_t header[5] = {0x11, 0xda, 0x27, 0x00, 0x00};
+  for (int i = 0; i < 5; i++){
+    if (frame[i] != header[i]) {
+      ESP_LOGI(TAG, "non daikin_arc frame,  expected %02x @pos %d, got %02x", header[i], i, frame[i]);
+      return false;
+    }
+  }
+  return true;
+}
+
 bool DaikinArcClimate::parse_state_frame_(const uint8_t frame[]) {
   uint8_t checksum = 0;
+  if(!this->is_daikin_frame_(frame)){
+    return false;
+  }
   for (int i = 0; i < (DAIKIN_STATE_FRAME_SIZE - 1); i++) {
     checksum += frame[i];
   }
@@ -424,55 +438,41 @@ bool DaikinArcClimate::on_receive(remote_base::RemoteReceiveData data) {
       }
     }
     state_frame[pos] = byte;
-    if (pos == 0) {
-      // frame header
-      if (byte != 0x11) {
-        ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
-        return false;
-      }
-    } else if (pos == 1) {
-      // frame header
-      if (byte != 0xDA) {
-        ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
-        return false;
-      }
-    } else if (pos == 2) {
-      // frame header
-      if (byte != 0x27) {
-        ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
-        return false;
-      }
-    } else if (pos == 3) {  // NOLINT(bugprone-branch-clone)
-      // frame header
-      if (byte != 0x00) {
-        ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
-        return false;
-      }
-    } else if (pos == 4) {
-      // frame type
-      if (byte != 0x00) {
-        ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
-        return false;
-      }
-    } else if (pos == 5) {
-      if (data.size() == 385) {
-        /*
-        11 da 27 00 00 1a 0c 04 2c 21 61 07 00 07 0c 00 18 00 0e 3c 00 6c 1b 61
-                       Inside Temp
-                          Outside Temp
-                              Humdidity
-
-        */
-        this->current_temperature = state_frame[5];  // Inside temperature
-        // this->current_temperature = state_frame[6]; // Outside temperature
-        this->publish_state();
-        return true;
-      } else if ((byte & 0x40) != 0x40) {
-        ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
-        return false;
-      }
-    }
   }
+
+  /**
+    The following code snippet seems to be an exception respect to the standard daikin protocol
+    decoded by parse_state_frame_(). The special case seems to be triggered by a data.size() of 385.
+    I leave the following behavior unchanged for this special case an let the parse_state_frame_() to 
+    decode the other cases.
+  */
+
+  if (data.size() == 385) {
+    if(!this->is_daikin_frame_(state_frame)){
+      return false;
+    }
+    /*
+    11 da 27 00 00 1a 0c 04 2c 21 61 07 00 07 0c 00 18 00 0e 3c 00 6c 1b 61
+                    Inside Temp
+                      Outside Temp
+                          Humdidity
+
+    */
+    this->current_temperature = state_frame[5];  // Inside temperature
+    // this->current_temperature = state_frame[6]; // Outside temperature
+    this->publish_state();
+    return true;
+  } 
+
+  /** The following conditional was checking a specific condition on state_frame[5] when data.size() != 385 
+      I consider this part of the exception above, DAIKIN ARC433A1 does not have such a requirement to be considered valid
+  */  
+
+  // } else if ((byte & 0x40) != 0x40) {
+  //   ESP_LOGI(TAG, "non daikin_arc expect pos: %d header: %02x", pos, byte);
+  //   return false;
+  // }
+  
   return this->parse_state_frame_(state_frame);
 }
 
