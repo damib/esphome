@@ -135,7 +135,7 @@ uint16_t BekoClimate::fan_speed_() const {
 }
 
 uint8_t BekoClimate::temperature_() const {
-  return BEKO_TEMP_MIN
+  return BEKO_TEMP_MIN;
  /*
   // Force special temperatures depending on the mode
   switch (this->mode) {
