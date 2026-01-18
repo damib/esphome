@@ -31,10 +31,10 @@ bool BekoClimate::on_receive(remote_base::RemoteReceiveData data) {
   auto &raw = data.get_raw_data();
   int size = raw.size();
   int inx = 0;
-  char line[(ntim+1)*20];
+  char line[(ntim+1)*5];
   while(inx < size){
     for(int i = 0; i < ntim && inx < size; i++, inx++) {
-      snprintf(line+i*5, 150-i*5, " % 4d", data[inx]);
+      snprintf(line+i*5, (ntim+1)*5, " % 4d", data[inx]);
     }
     ESP_LOGI(TAG, "%s", line);
   }
