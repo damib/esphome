@@ -131,7 +131,8 @@ uint16_t BekoClimate::fan_speed_() const {
       break;
   }
   return fan_speed;
-*/  return 0;
+*/  
+  return 0;
 }
 
 uint8_t BekoClimate::temperature_() const {
