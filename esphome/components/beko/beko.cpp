@@ -25,6 +25,9 @@ bool BekoClimate::parse_state_frame_(const uint8_t frame[]) {
 }
 
 bool BekoClimate::on_receive(remote_base::RemoteReceiveData data) {
+  for(int i = 0; i < data.size(); i++) {
+    ESP_LOGD(TAG, "Received data[%d]: %d", i, data[i]);
+  }
   return false;
 }
 
