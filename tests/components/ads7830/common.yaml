@@ -1,0 +1,20 @@
+ads7830:
+  i2c_id: i2c_bus
+  id: adc1
+  update_interval: 0.5s
+
+sensor:
+  - platform: ads7830
+    id: test_sensor
+    device: adc1
+    channel: 1
+    update_interval: 1s
+
+
+binary_sensor:
+  - platform: ads7830
+    id: test_binary_sensor
+    device: adc1
+    channel: 2
+    threshold: 127
+    update_interval: 1s
