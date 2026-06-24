@@ -2,12 +2,14 @@ ads7830:
   i2c_id: i2c_bus
   id: adc1
   update_interval: 0.5s
+  reference_voltage: 3.3
 
 sensor:
   - platform: ads7830
     id: test_sensor
     device: adc1
     channel: 1
+    use_external_reference: true
     update_interval: 1s
 
 
