@@ -7,7 +7,7 @@ namespace esphome::ads7830 {
 static const char *const TAG = "ads7830.i2c";
 
 uint8_t Ads7830::read_channel(uint8_t ch) {
-  if (ch > 7) {
+  if (ch >= NCHAN) {
     //in differential mode, channels 0-3 are the same as 4-7
     ESP_LOGW(TAG, "Invalid chan %i", int(ch));
     return 255;

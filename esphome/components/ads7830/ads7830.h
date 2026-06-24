@@ -7,13 +7,15 @@
 
 namespace esphome::ads7830 {
 
+const int NCHAN = 8;
+
 class Ads7830 : public i2c::I2CDevice, public PollingComponent {
 private:
-  const uint8_t chmap_[8]={0,4,1,5,2,6,3,7};
+  const uint8_t chmap_[NCHAN]={0,4,1,5,2,6,3,7};
   float reference_voltage_{2.5f};
   uint8_t  use_internal_reference_{8};
   uint8_t  differential_mode_{128};
-  uint8_t channels_[8];
+  uint8_t channels_[NCHAN];
 
 protected:
   uint8_t read_channel(uint8_t ch);
