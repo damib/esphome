@@ -10,7 +10,6 @@ sensor:
     device: adc1
     channel: 1
     use_external_reference: true
-    update_interval: 1s
 
 
 binary_sensor:
@@ -20,4 +19,3 @@ binary_sensor:
     channel: 2
     threshold: 127
     inverted: true
-    update_interval: 1s

@@ -1,6 +1,7 @@
 
 #include "esphome/core/log.h"
 #include "ads7830.h"
+#include "ads7830Channel.h"
 
 namespace esphome::ads7830 {
 
@@ -27,14 +28,17 @@ uint8_t Ads7830::read_channel(uint8_t ch) {
     ESP_LOGW(TAG, "Invalid read %i", error_code);
     return 255;
   }
-  if(this->channels_[ch] != rval)
+  if(this->channel_values_[ch] != rval)
     ESP_LOGVV(TAG, "Ch%i new value %02x)", ch, rval);
   return rval;
 }
 
 void Ads7830::update(){
   for (int i = 0; i < 8; i++) {
-    this->channels_[i] = read_channel(i);
+    this->channel_values_[i] = read_channel(i);
+  }
+  for (int i = 0; i < this->num_channels_; i++) {
+    this->channels_[i]->update_value();
   }
 }
 
@@ -62,8 +66,17 @@ bool Ads7830::get_use_internal_reference(uint8_t chno) const {
 
 float Ads7830::get_channel_voltage(uint8_t ch) const {
   if (this->use_internal_reference_ & (1<<ch))
-    return this->channels_[ch] * INTERNAL_REFERENCE / 255.0f; 
-  return this->channels_[ch] * this->reference_voltage_ / 255.0f; 
+    return this->channel_values_[ch] * INTERNAL_REFERENCE / 255.0f; 
+  return this->channel_values_[ch] * this->reference_voltage_ / 255.0f; 
+}
+
+void Ads7830::register_channel(Ads7830Channel *channel) {
+  if (this->num_channels_ < MAX_SENSORS) {
+    this->channels_[this->num_channels_] = channel;
+    this->num_channels_++;
+  } else {
+    ESP_LOGE(TAG, "Too many channels registered");
+  }
 }
 
 }

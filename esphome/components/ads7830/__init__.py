@@ -38,14 +38,13 @@ def channel_schema() -> cv.Schema:
         cv.Required(CONF_CHANNEL): cv.int_range(0,7),
         cv.Optional(CONF_DIFFERENTIAL_MODE, default=False): cv.boolean,
         cv.Optional(CONF_USE_EXTERNAL_REFERENCE, default=False): cv.boolean,
-    }).extend(cv.polling_component_schema("1s"))
+    })
 
 async def config_channel(config, var):
     adc_instance = await cg.get_variable(config[CONF_DEVICE])
     cg.add(var.set_differential_mode(config[CONF_DIFFERENTIAL_MODE]))
     cg.add(var.set_adc_instance(adc_instance, config[CONF_CHANNEL]))
     cg.add(var.set_use_internal_reference(not config[CONF_USE_EXTERNAL_REFERENCE]))
-    await cg.register_component(var, config)
 
 
 async def to_code(config):

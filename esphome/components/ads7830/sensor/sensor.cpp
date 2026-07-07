@@ -5,14 +5,10 @@
 
 namespace esphome::ads7830 {
 
-  static const char *const TAG = "sensor.ads7830.i2c";
-
-  void Sensor::setup() {};
-  void Sensor::dump_config() {};
-  void Sensor::update() {
-    uint8_t st = this->get_value();
-    if (this->state != st)
-      this->publish_state(st);
+  void Sensor::update_value() {
+    auto value = this->get_value();
+    if (this->state != value)
+      this->publish_state(value);
   };
 
 }
