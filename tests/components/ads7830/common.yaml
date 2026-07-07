@@ -19,4 +19,5 @@ binary_sensor:
     device: adc1
     channel: 2
     threshold: 127
+    inverted: true
     update_interval: 1s
