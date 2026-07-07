@@ -5,6 +5,7 @@ from esphome.components import binary_sensor, ads7830
 CODEOWNERS = ["@damib"]
 
 from esphome.const import (
+    CONF_INVERTED,
     CONF_THRESHOLD,
 )
 
@@ -16,7 +17,8 @@ CONFIG_SCHEMA = (
     binary_sensor.binary_sensor_schema(Ads7830BinarySensor)
     .extend(ads7830.channel_schema())
     .extend({
-        cv.Required(CONF_THRESHOLD): cv.int_
+        cv.Required(CONF_THRESHOLD): cv.int_,
+        cv.Optional(CONF_INVERTED, default=False): cv.boolean,
     })
 )
 
@@ -24,4 +26,5 @@ async def to_code(config):
     print(config)
     var = await binary_sensor.new_binary_sensor(config)
     cg.add(var.set_threshold(config[CONF_THRESHOLD]))
+    cg.add(var.set_inverted(config[CONF_INVERTED]))
     await ads7830.config_channel(config, var)
