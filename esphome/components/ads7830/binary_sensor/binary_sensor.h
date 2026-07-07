@@ -8,11 +8,12 @@ namespace esphome::ads7830 {
 class BinarySensor : public binary_sensor::BinarySensor, public Ads7830Channel {
 public:
   void update() override;
-  void set_threshold(uint8_t th) { this->th_ = th; }
+  void dump_config() override;
+  void set_threshold(uint8_t th) { this->threshold_ = th; }
   void set_inverted(bool inverted) { this->inverted_ = inverted; }
 
 protected:
-  uint8_t th_{0};
+  uint8_t threshold_{0};
   bool inverted_{false};
 };
 

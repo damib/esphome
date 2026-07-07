@@ -4,20 +4,14 @@
 
 namespace esphome::ads7830 {
 
-float Ads7830Channel::sample() { 
-  return this->adc_->get_channel_voltage(this->ch_);
-};
+float Ads7830Channel::sample() {
+  if (!this->adc_) return NAN; // Sanity check. 
+  return this->adc_->get_channel_voltage(this->channel_index_, this->use_internal_reference_, this->differential_mode_);
+}
 
 uint8_t Ads7830Channel::get_value(){
-  return this->adc_->get_channel_value(this->ch_);
-}
-
-void Ads7830Channel::set_differential_mode(bool dm) {
-  this->adc_->set_differential_mode(this->ch_, dm);
-}
-
-void Ads7830Channel::set_use_internal_reference(bool ir) {
-  this->adc_->set_use_internal_reference(this->ch_, ir);
+  if (!this->adc_) return 0xff; // Sanity check. 
+  return this->adc_->get_channel_value(this->channel_index_, this->use_internal_reference_, this->differential_mode_);
 }
 
 } // namespace esphome::ads7830

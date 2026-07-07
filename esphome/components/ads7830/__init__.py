@@ -29,7 +29,7 @@ CONFIG_SCHEMA = (
         cv.Optional(CONF_REFERENCE_VOLTAGE, default=0.0): cv.float_
     })
     .extend(i2c.i2c_device_schema(0x48))
-    .extend(cv.polling_component_schema("1s"))
+    .extend(cv.COMPONENT_SCHEMA)
 )
 
 def channel_schema() -> cv.Schema:

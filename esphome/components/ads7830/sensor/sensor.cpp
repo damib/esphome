@@ -5,14 +5,15 @@
 
 namespace esphome::ads7830 {
 
-  static const char *const TAG = "sensor.ads7830.i2c";
+void Sensor::dump_config() {
+  ESP_LOGCONFIG(Ads7830::TAG, "Sensor:");
+  ESP_LOGCONFIG(Ads7830::TAG, "  Chan : %u", this->channel_index_);
+  ESP_LOGCONFIG(Ads7830::TAG, "  Int ref : %s", YESNO(this->use_internal_reference_));
+  ESP_LOGCONFIG(Ads7830::TAG, "  Diff mode : %s", YESNO(this->differential_mode_));
+}
 
-  void Sensor::setup() {};
-  void Sensor::dump_config() {};
-  void Sensor::update() {
-    uint8_t st = this->get_value();
-    if (this->state != st)
-      this->publish_state(st);
-  };
+void Sensor::update() {
+  this->publish_state(this->get_value());
+}
 
 }

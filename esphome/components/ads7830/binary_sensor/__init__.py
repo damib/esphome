@@ -4,6 +4,8 @@ from esphome.components import binary_sensor, ads7830
 
 CODEOWNERS = ["@damib"]
 
+DEPENDENCIES = ["ads7830"]
+
 from esphome.const import (
     CONF_INVERTED,
     CONF_THRESHOLD,

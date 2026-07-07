@@ -1,7 +1,6 @@
 ads7830:
   i2c_id: i2c_bus
   id: adc1
-  update_interval: 0.5s
   reference_voltage: 3.3
 
 sensor:

@@ -6,7 +6,7 @@
 
 namespace esphome::ads7830 {
 
-class Ads7830;
+class Ads7830; // Forward declaration
 
 /**
  * @brief Class to interface with a single channel of the ADS7830 ADC chip.
@@ -18,16 +18,17 @@ class Ads7830;
 
 class Ads7830Channel : public PollingComponent, public voltage_sampler::VoltageSampler {
 public:
-  float get_setup_priority() const override { return setup_priority::HARDWARE; }
-  void set_adc_instance(Ads7830 *p, uint8_t ch) { this->adc_ = p; this->ch_ = ch; }
-  void set_use_internal_reference(bool ir);
-  void set_differential_mode(bool dm);
+  void set_adc_instance(Ads7830 *p, uint8_t ch) { this->adc_ = p; this->channel_index_ = ch; }
+  void set_use_internal_reference(bool ir) { this->use_internal_reference_ = ir; }
+  void set_differential_mode(bool dm) { this->differential_mode_ = dm; }
   float sample() override;
   uint8_t get_value();
 
 protected:
   Ads7830 *adc_;
-  uint8_t ch_;
+  uint8_t channel_index_;
+  bool use_internal_reference_{false};
+  bool differential_mode_{false};
 };
 
 } // namespace esphome::ads7830

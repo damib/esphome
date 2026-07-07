@@ -19,28 +19,25 @@ const float INTERNAL_REFERENCE = 2.5;
  * to read raw values and voltages from the channels.
  */
 
-class Ads7830 : public i2c::I2CDevice, public PollingComponent {
+class Ads7830 : public Component, public i2c::I2CDevice {
 private:
-  const uint8_t chmap_[NCHAN]={0,4,1,5,2,6,3,7};
-  float reference_voltage_{2.5f};
-  uint8_t  use_internal_reference_{8};
-  uint8_t  differential_mode_{255};
-  uint8_t channels_[NCHAN];
-
-protected:
-  uint8_t read_channel(uint8_t ch);
+  // The channel map for the ADS7830. This array maps the channel index to the corresponding command bits for the ADC.
+  // This is valid only for single-ended mode, in differential mode channels 0-3 are the same as 4-7 inverted.
+  const uint8_t channel_map_[NCHAN]={0,4,1,5,2,6,3,7};
+  float external_reference_voltage_{0.0f};
 
 public:
-  Ads7830() {}
-  uint8_t get_channel_value(uint8_t ch) const { return this->channels_[ch]; }
-  void set_external_reference_voltage(float reference_voltage) { this->reference_voltage_ = reference_voltage; }
-  float get_external_reference_voltage() const { return this->reference_voltage_; }
-  float get_channel_voltage(uint8_t ch) const;
-  void set_use_internal_reference(uint8_t chno, bool use_internal_reference);
-  bool get_use_internal_reference(uint8_t chno) const;
-  void set_differential_mode(uint8_t chno, bool differential_mode);
-  bool get_differential_mode(uint8_t chno) const;
-  void update() override;
+  /**
+  * Usually TAG is  static constant in *.cpp file, here it is defined 
+  * as class static constant so that it can be reused in other classes.
+  * (Developer guide forbids only the use of static variables) 
+  */
+  constexpr static const char *const TAG = "ads7830";
+  
+  void dump_config() override;
+  uint8_t get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const;
+  void set_external_reference_voltage(float reference_voltage) { this->external_reference_voltage_ = reference_voltage; }
+  float get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) const;
 }; 
 
 } // namespace esphome::ads7830

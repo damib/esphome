@@ -4,6 +4,8 @@ from esphome.components import sensor, ads7830
 
 CODEOWNERS = ["@damib"]
 
+DEPENDENCIES = ["ads7830"]
+
 ads7830_ns = cg.esphome_ns.namespace("ads7830")
 Ads7830Channel = ads7830_ns.class_("Ads7830Channel", cg.PollingComponent)
 Ads7830Sensor = ads7830_ns.class_("Sensor", sensor.Sensor, Ads7830Channel)
