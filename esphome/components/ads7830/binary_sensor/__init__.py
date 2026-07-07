@@ -2,6 +2,8 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import binary_sensor, ads7830
 
+CODEOWNERS = ["@damib"]
+
 from esphome.const import (
     CONF_THRESHOLD,
 )

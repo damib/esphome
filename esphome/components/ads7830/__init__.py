@@ -1,6 +1,9 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import i2c
+
+CODEOWNERS = ["@damib"]
+
 from esphome.const import (
     CONF_CHANNEL,
     CONF_DEVICE,
