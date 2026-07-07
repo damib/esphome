@@ -8,6 +8,14 @@ namespace esphome::ads7830 {
 
 class Ads7830;
 
+/**
+ * @brief Class to interface with a single channel of the ADS7830 ADC chip.
+ * This class provides methods to read raw values and voltages from a specific channel of the ADS7830.
+ * It also allows configuring the channel's differential mode and internal reference usage.
+ * Sensors are derived from this class to provide specific functionality for different types of sensors.
+ * It implements the VoltageSampler interface to provide a standard way to sample voltage readings from the channel.
+ */
+
 class Ads7830Channel : public PollingComponent, public voltage_sampler::VoltageSampler {
 public:
   float get_setup_priority() const override { return setup_priority::HARDWARE; }

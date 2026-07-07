@@ -10,6 +10,15 @@ namespace esphome::ads7830 {
 const int NCHAN = 8;
 const float INTERNAL_REFERENCE = 2.5;
 
+/**
+ * @brief Class to interface with the ADS7830 ADC chip.
+ * This is a multiplexed 8-channel 8-bit ADC with I2C interface. 
+ * It can be used to read analog voltages from multiple sources.
+ * This class does not implement the VoltageSampler interface directly because
+ * VoltageSampler class doesn't handle multiple channels, it provides insted methods 
+ * to read raw values and voltages from the channels.
+ */
+
 class Ads7830 : public i2c::I2CDevice, public PollingComponent {
 private:
   const uint8_t chmap_[NCHAN]={0,4,1,5,2,6,3,7};
