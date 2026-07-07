@@ -23,7 +23,6 @@ CONFIG_SCHEMA = (
 )
 
 async def to_code(config):
-    print(config)
     var = await binary_sensor.new_binary_sensor(config)
     cg.add(var.set_threshold(config[CONF_THRESHOLD]))
     cg.add(var.set_inverted(config[CONF_INVERTED]))
