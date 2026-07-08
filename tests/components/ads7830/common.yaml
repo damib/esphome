@@ -11,7 +11,6 @@ sensor:
     use_external_reference: true
     update_interval: 1s
 
-
 binary_sensor:
   - platform: ads7830
     id: test_binary_sensor
