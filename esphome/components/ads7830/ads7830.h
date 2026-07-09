@@ -17,6 +17,7 @@ const float INTERNAL_REFERENCE = 2.5;
  * This class does not implement the VoltageSampler interface directly because
  * VoltageSampler class doesn't handle multiple channels, it provides insted methods 
  * to read raw values and voltages from the channels.
+ * https://www.ti.com/product/ADS7830
  */
 
 class Ads7830 : public Component, public i2c::I2CDevice {

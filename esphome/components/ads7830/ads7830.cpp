@@ -4,6 +4,10 @@
 
 namespace esphome::ads7830 {
 
+const uint8_t SINGLE_END_MASK = 0x80;
+const uint8_t CHANNEL_INDEX_SHIFT = 4;
+const uint8_t INTERNAL_REFERENCE_MASK = 0x08;
+const uint8_t ADC_ON_MASK = 0x04;
 
 uint8_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const {
   if (ch >= NCHAN) {
@@ -11,13 +15,11 @@ uint8_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) con
     ESP_LOGW(TAG, "Invalid chan %i", int(ch));
     return 255;
   }
-  uint8_t cmd = 0x04; // ADC always ON
-  cmd |= (diff_mode ? ch : this->channel_map_[ch])  << 4;
-  if (!diff_mode)
-    cmd |= 0x80;
-  if (int_ref)
-    cmd |= 0x01 << 3;
-  auto error_code = this->write_read(&cmd, 1, nullptr, 0);
+  uint8_t command_byte = ADC_ON_MASK; // ADC always ON
+  if (!diff_mode) command_byte |= SINGLE_END_MASK;
+  if (int_ref) command_byte |= INTERNAL_REFERENCE_MASK;
+  command_byte |= (diff_mode ? ch : this->channel_map_[ch]) << CHANNEL_INDEX_SHIFT;
+  auto error_code = this->write_read(&command_byte, 1, nullptr, 0);
   if (error_code) {
     ESP_LOGW(TAG, "Invalid write %i", error_code);
     return 255;
