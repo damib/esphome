@@ -9,7 +9,7 @@ float Ads7830Channel::sample() {
   return this->adc_->get_channel_voltage(this->channel_index_, this->use_internal_reference_, this->differential_mode_);
 }
 
-uint8_t Ads7830Channel::get_value(){
+uint32_t Ads7830Channel::get_value(){
   if (!this->adc_) return 0xff; // Sanity check. 
   return this->adc_->get_channel_value(this->channel_index_, this->use_internal_reference_, this->differential_mode_);
 }

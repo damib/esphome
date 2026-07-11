@@ -9,7 +9,7 @@ const uint8_t CHANNEL_INDEX_SHIFT = 4;
 const uint8_t INTERNAL_REFERENCE_MASK = 0x08;
 const uint8_t ADC_ON_MASK = 0x04;
 
-uint8_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const {
+uint32_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const {
   if (ch >= NCHAN) {
     //in differential mode, channels 0-3 are the same as 4-7 inverted
     ESP_LOGW(TAG, "Invalid chan %i", int(ch));
@@ -30,7 +30,7 @@ uint8_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) con
     ESP_LOGW(TAG, "Invalid read %i", error_code);
     return 255;
   }
-  return rval;
+  return uint32_t(rval);
 }
 
 float Ads7830::get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) const {

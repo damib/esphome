@@ -36,7 +36,8 @@ public:
   constexpr static const char *const TAG = "ads7830";
   
   void dump_config() override;
-  uint8_t get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const;
+  // This is virtual so support for similar ADC can be direved from this
+  virtual uint32_t get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const;
   void set_external_reference_voltage(float reference_voltage) { this->external_reference_voltage_ = reference_voltage; }
   float get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) const;
 }; 
