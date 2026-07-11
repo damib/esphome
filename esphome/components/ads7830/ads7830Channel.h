@@ -22,7 +22,7 @@ public:
   void set_use_internal_reference(bool ir) { this->use_internal_reference_ = ir; }
   void set_differential_mode(bool dm) { this->differential_mode_ = dm; }
   float sample() override;
-  uint32_t get_value();
+  uint32_t sample_raw();
 
 protected:
   Ads7830 *adc_;

@@ -15,7 +15,7 @@ void BinarySensor::dump_config() {
 }
 
 void BinarySensor::update() {
-  uint8_t aval = this->get_value();
+  uint8_t aval = this->sample_raw();
   this->publish_state(this->inverted_ ? aval < this->threshold_ : aval >= this->threshold_);
 }
 

@@ -13,7 +13,7 @@ void Sensor::dump_config() {
 }
 
 void Sensor::update() {
-  this->publish_state(this->get_value());
+  this->publish_state(this->sample_raw());
 }
 
 }
