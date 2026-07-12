@@ -43,4 +43,8 @@ void Ads7830::dump_config() {
   ESP_LOGCONFIG(TAG, "  Ext. ref. : %.3fV", double(this->external_reference_voltage_));
 }
 
+uint32_t Ads7830::get_max_value() const {
+  return 255;
+}
+
 } // namespace esphome::ads7830
