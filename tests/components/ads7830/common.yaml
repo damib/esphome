@@ -3,20 +3,4 @@ ads7830:
   id: adc1
   reference_voltage: 3.3
 
-sensor:
-  - platform: ads7830
-    id: test_sensor
-    device: adc1
-    channel: 1
-    use_external_reference: true
-    update_interval: 1s
-
-binary_sensor:
-  - platform: ads7830
-    id: test_binary_sensor
-    device: adc1
-    channel: 2
-    threshold: 127
-    inverted: true
-    update_interval: 1s
-    value_mode: raw
+<<: !include sensors.yaml
