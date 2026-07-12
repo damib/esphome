@@ -21,7 +21,7 @@ const float INTERNAL_REFERENCE = 2.5;
  */
 
 class Ads7830 : public Component, public i2c::I2CDevice {
-private:
+protected:
   // The channel map for the ADS7830. This array maps the channel index to the corresponding command bits for the ADC.
   // This is valid only for single-ended mode, in differential mode channels 0-3 are the same as 4-7 inverted.
   const uint8_t channel_map_[NCHAN]={0,4,1,5,2,6,3,7};
