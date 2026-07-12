@@ -1,0 +1,6 @@
+ads7828:
+  i2c_id: i2c_bus
+  id: adc1
+  reference_voltage: 3.3
+
+<<: !include ../ads7830/sensors.yaml
