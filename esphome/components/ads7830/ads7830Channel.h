@@ -21,14 +21,18 @@ public:
   void set_adc_instance(Ads7830 *p, uint8_t ch) { this->adc_ = p; this->channel_index_ = ch; }
   void set_use_internal_reference(bool ir) { this->use_internal_reference_ = ir; }
   void set_differential_mode(bool dm) { this->differential_mode_ = dm; }
-  float sample() override;
-  uint32_t sample_raw();
+  void set_use_raw_value(bool rv) { this->use_raw_value_ = rv; }
+  float sample() override; // Always return a voltage
+  float sample_value() { return this->use_raw_value_ ? this->sample_raw() : this->sample(); }
 
 protected:
+  uint32_t sample_raw();
+
   Ads7830 *adc_;
   uint8_t channel_index_;
   bool use_internal_reference_{false};
   bool differential_mode_{false};
+  bool use_raw_value_{false};
 };
 
 } // namespace esphome::ads7830

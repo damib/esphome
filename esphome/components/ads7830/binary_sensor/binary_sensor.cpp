@@ -10,12 +10,13 @@ void BinarySensor::dump_config() {
   ESP_LOGCONFIG(Ads7830::TAG, "  Chan : %u", this->channel_index_);
   ESP_LOGCONFIG(Ads7830::TAG, "  Int ref : %s", YESNO(this->use_internal_reference_));
   ESP_LOGCONFIG(Ads7830::TAG, "  Diff mode : %s", YESNO(this->differential_mode_));
-  ESP_LOGCONFIG(Ads7830::TAG, "  Thrs : %u", this->threshold_);
+  ESP_LOGCONFIG(Ads7830::TAG, "  Thrs : %.1f", this->threshold_);
   ESP_LOGCONFIG(Ads7830::TAG, "  Inverted : %s", YESNO(this->inverted_));
+  ESP_LOGCONFIG(Ads7830::TAG, "  Use Raw Value : %s", YESNO(this->use_raw_value_));
 }
 
 void BinarySensor::update() {
-  uint8_t aval = this->sample_raw();
+  uint8_t aval = this->sample_value();
   this->publish_state(this->inverted_ ? aval < this->threshold_ : aval >= this->threshold_);
 }
 

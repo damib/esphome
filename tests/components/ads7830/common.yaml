@@ -19,3 +19,4 @@ binary_sensor:
     threshold: 127
     inverted: true
     update_interval: 1s
+    use_raw_value: True

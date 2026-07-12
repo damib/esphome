@@ -9,11 +9,11 @@ class BinarySensor : public binary_sensor::BinarySensor, public Ads7830Channel {
 public:
   void update() override;
   void dump_config() override;
-  void set_threshold(uint8_t th) { this->threshold_ = th; }
+  void set_threshold(float th) { this->threshold_ = th; }
   void set_inverted(bool inverted) { this->inverted_ = inverted; }
 
 protected:
-  uint8_t threshold_{0};
+  float threshold_{0};
   bool inverted_{false};
 };
 

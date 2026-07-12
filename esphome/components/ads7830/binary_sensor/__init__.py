@@ -19,7 +19,7 @@ CONFIG_SCHEMA = (
     binary_sensor.binary_sensor_schema(Ads7830BinarySensor)
     .extend(ads7830.channel_schema())
     .extend({
-        cv.Required(CONF_THRESHOLD): cv.int_,
+        cv.Required(CONF_THRESHOLD): cv.float_,
         cv.Optional(CONF_INVERTED, default=False): cv.boolean,
     })
 )
