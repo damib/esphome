@@ -8,6 +8,14 @@ namespace esphome::ads7830 {
 
 class Ads7830; // Forward declaration
 
+enum ValueMode {
+  RAW,
+  VOLTAGE,
+  PERCENT,
+};
+
+const char *ValueModeStr(ValueMode mode);
+
 /**
  * @brief Class to interface with a single channel of the ADS7830 ADC chip.
  * This class provides methods to read raw values and voltages from a specific channel of the ADS7830.
@@ -21,9 +29,9 @@ public:
   void set_adc_instance(Ads7830 *p, uint8_t ch) { this->adc_ = p; this->channel_index_ = ch; }
   void set_use_internal_reference(bool ir) { this->use_internal_reference_ = ir; }
   void set_differential_mode(bool dm) { this->differential_mode_ = dm; }
-  void set_use_raw_value(bool rv) { this->use_raw_value_ = rv; }
+  void set_value_mode(ValueMode sm) { this->value_mode_ = sm; }
   float sample() override; // Always return a voltage
-  float sample_value() { return this->use_raw_value_ ? this->sample_raw() : this->sample(); }
+  float sample_value();
 
 protected:
   uint32_t sample_raw();
@@ -32,7 +40,7 @@ protected:
   uint8_t channel_index_;
   bool use_internal_reference_{false};
   bool differential_mode_{false};
-  bool use_raw_value_{false};
+  ValueMode value_mode_{RAW};
 };
 
 } // namespace esphome::ads7830

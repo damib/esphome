@@ -12,7 +12,7 @@ void BinarySensor::dump_config() {
   ESP_LOGCONFIG(Ads7830::TAG, "  Diff mode : %s", YESNO(this->differential_mode_));
   ESP_LOGCONFIG(Ads7830::TAG, "  Thrs : %.1f", this->threshold_);
   ESP_LOGCONFIG(Ads7830::TAG, "  Inverted : %s", YESNO(this->inverted_));
-  ESP_LOGCONFIG(Ads7830::TAG, "  Use Raw Value : %s", YESNO(this->use_raw_value_));
+  ESP_LOGCONFIG(Ads7830::TAG, "  Value Mode : %s", ValueModeStr(this->value_mode_));
 }
 
 void BinarySensor::update() {

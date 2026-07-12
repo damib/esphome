@@ -14,4 +14,23 @@ uint32_t Ads7830Channel::sample_raw(){
   return this->adc_->get_channel_value(this->channel_index_, this->use_internal_reference_, this->differential_mode_);
 }
 
+float Ads7830Channel::sample_value(){
+  switch (this->value_mode_){
+    case VOLTAGE :
+      return this->sample();
+    case PERCENT :
+      return 100.0 * this->sample_raw() / this->adc_->get_max_value(); 
+    default:
+      return this->sample_raw();  
+  }
+}
+
+const char *ValueModeStr(ValueMode mode) {
+  switch(mode){
+    case RAW: return "RAW";
+    case VOLTAGE: return "VOLTAGE";
+    default : return "PERCENT";
+  }
+}
+
 } // namespace esphome::ads7830
