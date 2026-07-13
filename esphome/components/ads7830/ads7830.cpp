@@ -15,15 +15,10 @@ uint32_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) co
   if (!diff_mode) command_byte |= SINGLE_END_MASK;
   if (int_ref) command_byte |= INTERNAL_REFERENCE_MASK;
   command_byte |= (diff_mode ? ch : this->channel_map_[ch]) << CHANNEL_INDEX_SHIFT;
-  auto error_code = this->write_read(&command_byte, 1, nullptr, 0);
-  if (error_code) {
-    ESP_LOGW(TAG, "Invalid write %i", error_code);
-    return this->get_max_value();
-  }
   uint8_t rval;
-  error_code = this->read(&rval, 1);
+  auto error_code = this->write_read(&command_byte, 1, &rval, 1);
   if (error_code) {
-    ESP_LOGW(TAG, "Invalid read %i", error_code);
+    ESP_LOGW(TAG, "Invalid write_read() %i", error_code);
     return this->get_max_value();
   }
   return uint32_t(rval);
