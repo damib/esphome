@@ -34,7 +34,6 @@ public:
   float sample_value();
 
 protected:
-  uint32_t sample_raw();
 
   Ads7830 *adc_;
   uint8_t channel_index_;

@@ -34,6 +34,11 @@ float Ads7830::get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) con
   return val / this->get_max_value() * (int_ref ? INTERNAL_REFERENCE : this->external_reference_voltage_); 
 }
 
+float Ads7830::get_channel_normalized(uint8_t ch, bool int_ref, bool diff_mode) const {
+  auto val = this->get_channel_value(ch, int_ref, diff_mode);
+  return 100.0 * val / this->get_max_value();
+}
+
 void Ads7830::dump_config() {
   ESP_LOGCONFIG(TAG, "ADS7830:");
   ESP_LOGCONFIG(TAG, "  Ext. ref. : %.3fV", double(this->external_reference_voltage_));

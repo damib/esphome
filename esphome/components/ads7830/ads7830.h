@@ -42,9 +42,10 @@ public:
   void dump_config() override;
   // This is virtual so support for similar ADC can be direved from this
   virtual uint32_t get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const;
+  float get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) const;
+  float get_channel_normalized(uint8_t ch, bool int_ref, bool diff_mode) const;
   virtual uint32_t get_max_value() const; 
   void set_external_reference_voltage(float reference_voltage) { this->external_reference_voltage_ = reference_voltage; }
-  float get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) const;
 }; 
 
 } // namespace esphome::ads7830
