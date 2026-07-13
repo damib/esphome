@@ -4,16 +4,12 @@
 
 namespace esphome::ads7830 {
 
-const uint8_t SINGLE_END_MASK = 0x80;
-const uint8_t CHANNEL_INDEX_SHIFT = 4;
-const uint8_t INTERNAL_REFERENCE_MASK = 0x08;
-const uint8_t ADC_ON_MASK = 0x04;
 
 uint32_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) const {
   if (ch >= NCHAN) {
     //in differential mode, channels 0-3 are the same as 4-7 inverted
     ESP_LOGW(TAG, "Invalid chan %i", int(ch));
-    return 255;
+    return this->get_max_value();
   }
   uint8_t command_byte = ADC_ON_MASK; // ADC always ON
   if (!diff_mode) command_byte |= SINGLE_END_MASK;
@@ -22,20 +18,20 @@ uint32_t Ads7830::get_channel_value(uint8_t ch, bool int_ref, bool diff_mode) co
   auto error_code = this->write_read(&command_byte, 1, nullptr, 0);
   if (error_code) {
     ESP_LOGW(TAG, "Invalid write %i", error_code);
-    return 255;
+    return this->get_max_value();
   }
   uint8_t rval;
   error_code = this->read(&rval, 1);
   if (error_code) {
     ESP_LOGW(TAG, "Invalid read %i", error_code);
-    return 255;
+    return this->get_max_value();
   }
   return uint32_t(rval);
 }
 
 float Ads7830::get_channel_voltage(uint8_t ch, bool int_ref, bool diff_mode) const {
   auto val = this->get_channel_value(ch, int_ref, diff_mode);
-  return val / 255.0f * (int_ref ? INTERNAL_REFERENCE : this->external_reference_voltage_); 
+  return val / this->get_max_value() * (int_ref ? INTERNAL_REFERENCE : this->external_reference_voltage_); 
 }
 
 void Ads7830::dump_config() {

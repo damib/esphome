@@ -9,6 +9,10 @@ namespace esphome::ads7830 {
 
 const int NCHAN = 8;
 const float INTERNAL_REFERENCE = 2.5;
+const uint8_t SINGLE_END_MASK = 0x80;
+const uint8_t CHANNEL_INDEX_SHIFT = 4;
+const uint8_t INTERNAL_REFERENCE_MASK = 0x08;
+const uint8_t ADC_ON_MASK = 0x04;
 
 /**
  * @brief Class to interface with the ADS7830 ADC chip.
